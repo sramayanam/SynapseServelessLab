@@ -30,3 +30,23 @@ from openrowset(
                 country varchar(100) '$.countries_and_territories')
 where country = 'India'
 order by country, date_rep desc;
+
+
+select
+id,
+CASE WHEN parent1 IS NULL THEN concat(parent1fname,' ',parent1lname) ELSE parent1 END Parent1Name,
+CASE WHEN parent2 IS NULL THEN concat(parent2fname,' ',parent2lname) ELSE parent2 END Parent2Name
+from openrowset(
+        bulk 'https://srramsynstorage.blob.core.windows.net/data/jsonl/families.jsonl',
+                format='csv', fieldterminator ='0x0b', fieldquote = '0x0b'
+    ) with (doc nvarchar(max)) as rows
+cross apply openjson (doc)
+        with (  
+                id varchar(100),
+                parent1 varchar(25) '$.parents[0].firstName',
+                parent2 varchar(25) '$.parents[1].firstName',
+                parent1fname varchar(25) '$.parents[0].familyName',
+                parent1lname varchar(25) '$.parents[0].givenName',
+                parent2fname varchar(25) '$.parents[1].familyName',
+                parent2lname varchar(25) '$.parents[1].givenName'
+                );
