@@ -1,9 +1,4 @@
-SELECT COUNT(*)
-FROM 
-OPENROWSET(
-BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/green/puYear=*/puMonth=*/*.parquet',
-FORMAT='PARQUET'
-) t
+
 
 CREATE DATABASE DataExplorationDB 
                 COLLATE Latin1_General_100_BIN2_UTF8;
@@ -95,4 +90,9 @@ FROM OPENROWSET(
     FORMAT = 'parquet') AS rows
 
 
-DROP EXTERNAL TABLE dbo.taxidata1;
+SELECT COUNT(*)
+FROM 
+OPENROWSET(
+BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/green/puYear=*/puMonth=*/*.parquet',
+FORMAT='PARQUET'
+) t
