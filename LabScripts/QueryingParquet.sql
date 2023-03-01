@@ -1,24 +1,13 @@
-
-
-CREATE DATABASE DataExplorationDB 
+CREATE DATABASE DataExplorationDB1 
                 COLLATE Latin1_General_100_BIN2_UTF8;
 
 
-USE DataExplorationDB;
-
+USE DataExplorationDB1;
+CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'Lz8oq1dn';
+GO
 CREATE DATABASE SCOPED CREDENTIAL [storage_credential] WITH IDENTITY='Managed Identity';
 GO
 CREATE EXTERNAL DATA SOURCE ContosoLake1 WITH ( LOCATION = 'https://srramsynstorage.dfs.core.windows.net',CREDENTIAL = storage_credential);
-GO
-
-
-
-
-GRANT ADMINISTER DATABASE BULK OPERATIONS TO data_explorer;
-GO
-
-ALTER ROLE db_datareader
-	ADD MEMBER data_explorer;  
 GO
 
 CREATE EXTERNAL FILE FORMAT ParquetFormat
@@ -28,13 +17,14 @@ CREATE EXTERNAL FILE FORMAT ParquetFormat
 GO
 
 SELECT
-    TOP 100 *,result.filepath(1)
+    TOP 100 *,result.filepath(1) as YearMonth
 FROM
     OPENROWSET(
             BULK '/data/parquetfiles/green_tripdata_*.*',
-            DATA_SOURCE = 'ContosoLake',
+            DATA_SOURCE = 'ContosoLake1',
             FORMAT='PARQUET'
-    ) AS [result];
+    ) AS [result]
+;
 
 DROP EXTERNAL TABLE dbo.taxidata;
 CREATE EXTERNAL TABLE dbo.taxidata
@@ -63,36 +53,9 @@ congestion_surcharge float
 WITH
 (
     LOCATION='data/parquetfiles/green_tripdata_*.parquet',
-    DATA_SOURCE=ContosoLake,
+    DATA_SOURCE=ContosoLake1,
     FILE_FORMAT=ParquetFormat
 );
 GO
 
 SELECT TOP 100 * FROM dbo.taxidata;
-
-SELECT
-    TOP 100 *
-FROM
-    OPENROWSET(
-        BULK 'data/parquetfiles/green_tripdata_2022-08.parquet',
-        DATA_SOURCE='ContosoLake',
-        FORMAT='PARQUET'
-    ) AS [result];
-
-
-
--- query the table
-
-
-SELECT TOP 100 *
-FROM OPENROWSET(
-    BULK 'https://srramsynstorage.dfs.core.windows.net/data/parquetfiles/*.*',
-    FORMAT = 'parquet') AS rows
-
-
-SELECT COUNT(*)
-FROM 
-OPENROWSET(
-BULK 'https://azureopendatastorage.blob.core.windows.net/nyctlc/green/puYear=*/puMonth=*/*.parquet',
-FORMAT='PARQUET'
-) t
