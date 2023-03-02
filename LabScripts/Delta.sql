@@ -1,3 +1,6 @@
+/** First run the associated notebook CreateSampleDeltaLakeFiles before querying the delta format**/
+/** The notbook converts Parquet files into delta format**/
+
 CREATE EXTERNAL FILE FORMAT DeltaLakeFormat
 WITH (  
     FORMAT_TYPE = DELTA
