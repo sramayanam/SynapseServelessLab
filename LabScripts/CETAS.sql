@@ -1,3 +1,6 @@
+/* Create External table as select is useful when committing 
+the required data post data exploration
+ to the storage for later use ****/
 USE DataExplorationDB;
 GO
 

@@ -1,3 +1,6 @@
+/**** Partitioning views are extremely helpful in the scenarios where end user/tool cannot
+generate run away queries***/
+
 CREATE VIEW TaxiPartitioningView AS
 SELECT
 result.*,result.filepath(1) as yearmonth

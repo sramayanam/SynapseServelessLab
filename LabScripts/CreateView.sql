@@ -1,3 +1,4 @@
+/** Implement the business logic in views and render them as reports in PowerBI***/
 DROP VIEW IF EXISTS GreenTaxiCleansed;
 GO
 CREATE VIEW GreenTaxiCleansed AS

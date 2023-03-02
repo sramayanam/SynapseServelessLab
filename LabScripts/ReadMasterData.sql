@@ -1,3 +1,7 @@
+/***To create a virtual datalake the master data needs to be ingested with fact data***/
+
+/*** Explore the csv file***/
+
 SELECT
 TOP 100 *
 FROM
@@ -8,6 +12,8 @@ FROM
             PARSER_VERSION = '2.0'
     ) AS [location];
 
+/****Create csv external file format***/
+
 DROP EXTERNAL FILE FORMAT CsvFormat;
 CREATE EXTERNAL FILE FORMAT CsvFormat
     WITH (
@@ -15,10 +21,12 @@ CREATE EXTERNAL FILE FORMAT CsvFormat
         FORMAT_OPTIONS(
             FIELD_TERMINATOR = ',',
             STRING_DELIMITER = '"',
-            FIRST_ROW = 2
+            FIRST_ROW = 2 /**Indicates a header row**/
         )
     );
 GO
+
+/*** Read master data***/
 
 DROP EXTERNAL TABLE dbo.location;
 CREATE EXTERNAL TABLE dbo.location
