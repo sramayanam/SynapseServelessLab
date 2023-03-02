@@ -1,7 +1,10 @@
+/*** this is the file to start the exercises ***/
+
 CREATE DATABASE DataExplorationDB1 
                 COLLATE Latin1_General_100_BIN2_UTF8;
 
 
+/*** Read Parquet ***/
 USE DataExplorationDB1;
 CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'Lz8oq1dn';
 GO
@@ -26,6 +29,7 @@ FROM
     ) AS [result]
 ;
 
+/**** Create Fact table ****/
 DROP EXTERNAL TABLE dbo.taxidata;
 CREATE EXTERNAL TABLE dbo.taxidata
 (
