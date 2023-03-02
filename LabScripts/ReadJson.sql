@@ -1,3 +1,4 @@
+/** There are two ways to read the JSON files using JSON_VALUE & OpenJSON as shown below **/
 select
     TOP 100
     JSON_VALUE(doc, '$.date_rep') AS date_reported,
@@ -31,6 +32,9 @@ from openrowset(
 where country = 'India'
 order by country, date_rep desc;
 
+/** The following query shows a way to read the nested json structure and apply business rules
+to derive the diffent patterns **/
+/** This example shows two patterns that are read to derive parentname **/
 
 select
 id,
